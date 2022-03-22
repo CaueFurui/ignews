@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { GetServerSideProps } from 'next'
+import { GetStaticProps } from 'next'
 import Avatar from '../../public/images/avatar.svg'
 import { SubscribeButton } from '../components/SubscribeButton'
 import styles from './home.module.scss'
@@ -39,7 +39,7 @@ export default function Home({ product }: HomeProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const price = await stripe.prices.retrieve('price_1Kg8TKDi4Fqp03883ef2JO1B')
 
   const product = {
@@ -52,7 +52,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
   
   return {
     props: {
-      product
-    }
+      product,
+    },
+    revalidate: 60 * 60 * 24,
   }
 }
